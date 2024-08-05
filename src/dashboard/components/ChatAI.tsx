@@ -152,7 +152,7 @@ export const ChatAI = () => {
                             ) : (
                                 <>
                                     {
-                                        serializePlainText(currentMytho ? currentMytho.content : []).length < 100  && (
+                                        (serializePlainText(currentMytho ? currentMytho.content : []).length < 100 && selectedTextToSend.length === 0)  && (
                                             <div className="flex flex-col gap-2 mt-24">
 
                                                 <div className="text-center text-gray-500">
