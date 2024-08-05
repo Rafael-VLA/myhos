@@ -1,0 +1,20 @@
+export const MYTHO_TYPES = [
+    "Novela",
+    "Cuento",
+    "Ensayo",
+    "Poema",
+    "Teatro",
+    "Fábula",
+    "Mitología",
+    "Leyenda",
+    "Mito",
+    "Crónica",
+    "Diario",
+    "Memorias",
+    "Autobiografía",
+    "Biografía",
+    "Narrativa gráfica (Cómic)",
+    "Literatura infantil y juvenil",
+    "Ensayo Literario",
+    "Ficción especulativa"
+]
