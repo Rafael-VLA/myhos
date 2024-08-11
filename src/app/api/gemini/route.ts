@@ -32,7 +32,6 @@ export const POST = async (req: Request) => {
         userMessage
     } = await req.json()
 
-    
     const result = await generateText({
         model: google("models/gemini-1.5-flash-latest"),
         messages: [

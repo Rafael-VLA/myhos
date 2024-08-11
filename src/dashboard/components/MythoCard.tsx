@@ -6,6 +6,7 @@ import { Mytho } from '@/shared/interfaces/mytho'
 import { clsx } from 'clsx'
 import { FC, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { MythoCardMenu } from './MythoCardMenu'
 
 interface Props {
     mytho: Mytho
@@ -36,14 +37,17 @@ export const MythoCard: FC<Props> = ({ mytho }) => {
         router.push(`/dashboard/mytho/new/${id}`)
     }
 
-
     return (
         <Card
             onClick={redirectToPage}
             className="w-full cursor-pointer p-6 grid gap-6 shadow-sm transition-all duration-300 hover:shadow-lg"
         >
             <div className="grid gap-2">
-                <h2 className="text-lg font-semibold">{title}</h2>
+                <div className="flex justify-between items-center">
+                    <h2 className="text-lg font-semibold">{title}</h2>
+
+                    <MythoCardMenu id={ id } />
+                </div>
                 <div className="flex items-center gap-4 text-muted-foreground">
 
                     {/* TODO: Usar una librería para mejorar el formato de fecha */}
@@ -77,7 +81,7 @@ export const MythoCard: FC<Props> = ({ mytho }) => {
                         </div>
                     )
                 }
-                <div className="flex items-center gap-4 mt-4">
+                <div className="flex items-center gap-2 mt-4 flex-wrap">
                     {
                         genders.map(gender => (
                             <Badge variant="outline" className="px-3 py-1 rounded-full capitalize" key={gender}>

@@ -6,11 +6,19 @@ import { useRouter } from "next/navigation"
 import { HiChevronLeft, HiOutlineDocumentArrowDown } from "react-icons/hi2"
 import { useAIStore } from "../store/aiStore"
 import { useMythoStore } from "../store/mythoStore"
+import { serializeToHTML } from "../utils/slate"
+import { exportHTMLToPDF } from "../utils/export-pdf"
 
 export const CustomNavbarMytho = () => {
     const router = useRouter()
     const cleanMessageHistory = useAIStore(store => store.cleanMessageHistory);
     const currentMytho = useMythoStore(store => store.currentMytho)
+
+    const handleExport = () => {
+        if(!currentMytho) return;
+        const html = currentMytho.content.map(serializeToHTML).join("<br />")
+        exportHTMLToPDF(html, currentMytho.title)
+    }
 
     return (
         <Navbar maxWidth="lg">
@@ -20,7 +28,7 @@ export const CustomNavbarMytho = () => {
                 </Button>
             </NavbarContent>
             <NavbarContent justify="end">
-                <Button onClick={() => alert("Por poco se logra :(")} variant="default" size="sm">
+                <Button onClick={handleExport} variant="default" size="sm">
                     <HiOutlineDocumentArrowDown size={14} className="mr-1 text-[#ff5f6d]" /> Export
                 </Button>
                 <Button variant="outline" size="sm" onClick={() => cleanMessageHistory(currentMytho ? currentMytho.id : "")}>

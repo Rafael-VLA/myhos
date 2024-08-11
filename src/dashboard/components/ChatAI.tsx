@@ -2,14 +2,14 @@ import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
 import clsx from "clsx"
 import { useForm } from "react-hook-form"
-import { HiCheck, HiPaperAirplane, HiSparkles, HiXMark } from "react-icons/hi2"
+import { HiPaperAirplane, HiSparkles, HiXMark } from "react-icons/hi2"
 import { serializePlainText } from "../utils/slate"
 import { useMythoStore } from "../store/mythoStore"
 import { submitQuestionAI } from "../services/mythoService"
 
 import useSWRMutation from 'swr/mutation'
 import { Loader2 } from "lucide-react"
-import { useCallback, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { useAIStore } from "../store/aiStore"
 import { useUIStore } from "../store/uiStore"
 import { ScrollArea } from "@/shared/components/ui/scroll-area"
@@ -21,6 +21,7 @@ type FormState = {
 export const ChatAI = () => {
     const { trigger, isMutating } = useSWRMutation('/api/gemini', submitQuestionAI);
     const userMessageRef = useRef<HTMLDivElement | null>(null)
+    const scrollRef = useRef<HTMLDivElement | null>(null)
 
     const { selectedTextToSend, setSelectedTextToSend } = useUIStore()
 
@@ -28,7 +29,7 @@ export const ChatAI = () => {
 
     const { addMessageHistory, messageHistory: list } = useAIStore();
 
-    const messageHistory = list.filter(e => e.idMytho === (currentMytho ? currentMytho.id : ""))
+    const messageHistory = useMemo(() => list.filter(e => e.idMytho === (currentMytho ? currentMytho.id : "")), [list, currentMytho])
 
     const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<FormState>({
         defaultValues: {
@@ -90,10 +91,6 @@ export const ChatAI = () => {
         } catch (error) {
             alert("Algo salió mal en la petición")
         }
-
-
-        
-
     }
 
     const onSubmit = async (values: FormState) => {
@@ -113,10 +110,23 @@ export const ChatAI = () => {
         handleActionSubmit({ userMessage: "Sugiereme una idea para que mi historia tenga un inicio con un evento catastrófico" }, false);
     }
 
+
+    // Está pendiente bajar el scroll en cuanto exista un nuevo mensaje
+    useEffect(() => {
+        if(messageHistory.length === 0 || !scrollRef.current) return;
+
+        const divWithScroll = scrollRef.current.querySelector("div[data-radix-scroll-area-viewport]");
+
+        if(!divWithScroll) return;
+
+        divWithScroll.scrollTop = divWithScroll.scrollHeight;
+
+    }, [messageHistory, scrollRef, selectedTextToSend])
+
     return (
         <div className="flex flex-col gap-3 h-full text-sm">
             {/* className="h-[calc(100vh-196px)]" */}
-            <ScrollArea className="h-[calc(100vh-(64px+24px+16px+14px+24px+32px))]">
+            <ScrollArea ref={scrollRef} className="h-[calc(100vh-(64px+24px+16px+14px+24px+32px))]">
 
                 <div className="flex-1 pr-4">
 
