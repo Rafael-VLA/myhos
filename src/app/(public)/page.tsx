@@ -13,6 +13,11 @@ export default function Home() {
         <p className="text-gray-500 max-w-xl mx-auto leading-relaxed">
           Nuestra herramienta de inteligencia artificial está diseñada para transformar tus ideas en narrativas cautivadoras y bien elaboradas.
         </p>
+
+        <p className="text-gray-500 max-w-xl mx-auto leading-relaxed">
+          Esto es un parrafo de información de esta plataforma
+        </p>
+        
       </div>
       <div className="mt-12 justify-center items-center space-x-3 flex">
 
